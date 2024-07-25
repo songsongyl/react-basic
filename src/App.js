@@ -77,6 +77,35 @@ function B1(){
    )
  }
 const MsgContext = createContext()
+
+//useEffect
+const URL='http://geek.itheima.net/v1_0/channels' //接口
+function Son3(){
+  useEffect(()=>{
+   const timer =  setInterval(()=>{
+      console.log('定时器');
+    },1000)
+    return ()=>{
+        clearInterval(timer)
+    }
+  }) //如果不清除 点击按钮之后还会继续计时
+  return <div>son</div>
+}
+
+//Hook
+function useToggle(){
+  const [value1,setValue1] = useState(true)
+  const toggle = ()=>setValue1(!value1)
+  return{
+    value1,
+    toggle
+  }
+}
+
+
+
+
+
 function App() {
   //必须放在里面 是替换不是修改 必须调用函数
   const [count ,setCount] = useState(0)
@@ -118,6 +147,33 @@ setName1(name)
 
 //跨层通信
 const msg1 = 'msg'
+
+//useEffect
+useEffect(()=>{
+// 获取频道列表 
+async function getList(){
+const res =  await fetch(URL) //获取异步资源的api
+const list = await res.json()
+console.log(list)
+setList(list.data.channels)
+ }
+ getList()
+},[])
+const [list,setList] = useState([])
+// useEffect(()=>{
+//   console.log('副作用函数执行');
+// })
+
+useEffect(()=>{
+  console.log('副作用函数执行');
+},[count])
+
+//组件卸载时自动执行清除副作用函数
+const [show,setShow] = useState(true)
+
+//Hook
+const {value1,toggle} = useToggle()
+
   return (
     <div className="App">
       <div>
@@ -187,8 +243,23 @@ const msg1 = 'msg'
       </div>
       <div>
         <h3>useEffect</h3>
-
+        <p>useEffect(()= {} 副作用函数,[]放置依赖项，可选参 ，为空数组时只执行一次；
+          不写会初始渲染+组件更新执行；添加特定依赖项会初始渲染+特性依赖项变化时执行) 渲染完毕加载数据
+          </p>
+        <ul>
+          {list.map(item=><li key={item.id}>{item.name}</li>)}
+        </ul>
+        {show&&<Son3/>}
+        <button onClick={()=>setShow(false)}>卸载son组件</button>
       </div>
+      <div>
+       {value1&& <h3>自定义Hook函数 use-- 实现逻辑封装和复用</h3>}
+        <button onClick={toggle}>toggle</button>
+      </div>
+      <div>
+        <h3>ReactHooks只能在组件内或者其他自定义Hook函数内使用,也不能在for,if,内使用</h3>
+      </div>
+
 
 
     </div>
