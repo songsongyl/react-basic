@@ -1,10 +1,11 @@
 //项目的根组件 App -> index.js ->public/index.html(root)
-import {useState} from 'react'//必须放最前面
+import {useState ,useRef, createContext, useContext,useEffect} from 'react'//必须放最前面
 import './index.css'
 const name = 'sy'
 function getName(){
   return 'syl'
 }
+
 const list = [{id:1,name:'Vue'},{id:2,name:'Web'}]
 const isLogin = true
 const articleType = 3 //0 1 3
@@ -18,6 +19,7 @@ if(articleType === 0){
   return <div>三图</div>
 }
 }
+
 //事件参数e
 const handleClick = (e)=>{
   console.log('button被点击了',e);
@@ -26,17 +28,55 @@ const handleClick = (e)=>{
 const handleClick2 = (name,e)=>{
   console.log('button被点击了',name,e);
 }
+
 //定义组件
 function Button(){
   return <button>Click</button>
 }
+
 //定义样式
 const style = {
   border:'1px solid red',
   padding:'10px'
 }
 
+//父传子 1.父组件传递数据 子组件标签身上绑定属性 2.子组件接收数据 props的参数 子组件不能修改父组件
+function Son(props){
+  console.log(props);//对象
+  return <div>this is son ,{props.name},{props.child},{props.children}</div>
+}
+// 子传父 在子组件调用父组件传递的函数并传递实参 解构赋值
+function Son2({onGetSonMsg}){
+  const sonMsg = 'sonMsg'
+  return(<div>son <button onClick={()=>onGetSonMsg(sonMsg)}>sendMsg</button></div>)
+}
 
+//兄弟通信 子传父->父传子
+function A({onGetAName}){
+  const name = 'A name'
+  return (
+    <div>this is A compnent <button onClick={()=>onGetAName(name)}>send</button></div>
+  )
+}
+function B({name}){
+  return (
+    <div>this is B compnent,{name}</div>
+  )
+}
+
+//跨层通信 1.createContext 顶层provider 底层useContext
+function A1(){
+  return (
+    <div>this is A compnent <B1/></div>
+  )
+}
+function B1(){
+  const msg =  useContext(MsgContext)
+   return (
+     <div>this is B compnent,{msg}</div>
+   )
+ }
+const MsgContext = createContext()
 function App() {
   //必须放在里面 是替换不是修改 必须调用函数
   const [count ,setCount] = useState(0)
@@ -50,6 +90,34 @@ const changeUser = ()=>{
     name:'syl'})
 }
 
+//实现双向绑定
+const [value,setValue] = useState('')
+
+//dom可用时 useRef钩子函数生成ref对象绑定到dom标签上 用ref.current获取dom
+const inputRef = useRef(null)
+const showDom = ()=>{
+  console.log(inputRef.current);
+  //用于显示一个对象的所有属性和方法
+  console.dir(inputRef.current);
+}
+
+const name1 = '父传子'
+
+const getMsg = (msg) =>{
+  console.log(msg);
+  setMsg(msg)
+}
+const [msg,setMsg] = useState('')
+
+//兄弟通信
+const [name,setName1] = useState('')
+const getAName = (name) =>{
+console.log(name)
+setName1(name)
+}
+
+//跨层通信
+const msg1 = 'msg'
   return (
     <div className="App">
       <div>
@@ -93,11 +161,34 @@ const changeUser = ()=>{
       <button onClick={changeUser}>{user.name}</button>
      </div>
       <div>
-        <h3></h3>
-        
-        
+        <h3>受控表单绑定</h3>
+        <input type='text' value={value} onChange={(e)=>setValue(e.target.value)}/>
       </div>
+      <div>
+        <h3>react获取Dom</h3>
+        <input type='text' ref={inputRef}/>
+        <button onClick={showDom}>获取dom</button>
+      </div>
+      <div>
+        <h3>组件通信（父子 兄弟 跨层）</h3>
+        <Son name={name1} age={18} list={['vue','react']} cb={()=>console.log(123)} child={<span>span</span>}/>
+        <Son>
+          <span>嵌套</span>
+        </Son>
+        {msg}
+        <Son2 onGetSonMsg={getMsg}/>
 
+        <A onGetAName={getAName}/>
+        <B name={name}/>
+
+        <MsgContext.Provider value={msg1}>
+          <A1/>
+        </MsgContext.Provider>
+      </div>
+      <div>
+        <h3>useEffect</h3>
+
+      </div>
 
 
     </div>
