@@ -57,6 +57,7 @@ const user = {
                 // 渲染评论列表 
                  // 1. 使用useState维护list 
                   //  const [commentList, setCommentList] = useState(_.orderBy(list, 'like', 'desc'))
+                  
                     const { commentList, setCommentList } = useGetList() 
                      // 删除功能 
                       const handleDel = (id) => {    

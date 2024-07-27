@@ -259,8 +259,49 @@ const {value1,toggle} = useToggle()
       <div>
         <h3>ReactHooks只能在组件内或者其他自定义Hook函数内使用,也不能在for,if,内使用</h3>
       </div>
+      <div>
+        <h3>Redux</h3>
+        <button id='decrement'>-</button>
+        <span id='count'>0</span>
+        <button id='increment'>+</button><br/>
+        1.定义reducer函数
+        数据不可变 必须基于原始状态生成新的状态
+        {/* function reducer(state = {count :0 },action){
+          if(action.type === 'INCREMENT'){
+            return {count:state.count +1}
+          }elseif(action.type === 'DECREMENT'){
+            return {count:state:count-1}
+          }else{
+            return state
+          }
+        } */}
+        2.使用reducer函数生成store实例
+          const store = Redux.createStore(reducer)
+        3.通过store的subscribe订阅数据变化
+        回调函数每次state变化自动执行
+        {/* store.subscribe(()=>{
+            console.log('state变化了',store.getState());
+            $('count').text(store.getState().count)
+        }) */}
+        4.通过store的dispatch函数提交action 更改状态
+        {/* const inBtn = $('increment')
+        inBtn.Click(()=>{
+          store.dispatch({
+            type:'INCREMENT'
+          })
+        })
+         const dBtn = $('decrement')
+        dBtn.Click(()=>{
+          store.dispatch({
+            type:'DECREMENT'
+          })
+        }) */}
+        5.通过store getState方法获取最新状态更新到视图中
 
+      </div>
+      <div>
 
+      </div>
 
     </div>
   );
