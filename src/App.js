@@ -1,6 +1,8 @@
 //项目的根组件 App -> index.js ->public/index.html(root)
 import {useState ,useRef, createContext, useContext,useEffect} from 'react'//必须放最前面
 import './index.css'
+import './index.scss'
+import {Button} from 'antd'
 const name = 'sy'
 function getName(){
   return 'syl'
@@ -30,7 +32,7 @@ const handleClick2 = (name,e)=>{
 }
 
 //定义组件
-function Button(){
+function Button1(){
   return <button>Click</button>
 }
 
@@ -209,7 +211,7 @@ const {value1,toggle} = useToggle()
      <div>
       <h3>组件</h3>
       {/* 自闭合也可以 */}
-      <Button ></Button>
+      <Button1 ></Button1>
      </div>
      <div>
       <h3>useState 可以向组件添加状态变量 数据控制渲染结果</h3>
@@ -300,7 +302,7 @@ const {value1,toggle} = useToggle()
 
       </div>
       <div>
-
+        <Button type='primary'>test</Button>
       </div>
 
     </div>
